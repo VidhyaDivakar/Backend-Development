@@ -5,7 +5,7 @@ const router = express.Router();
 const Task = require("../../models/Task");
 const Project = require("../../models/Project");
 
-const authMiddleware = require("../utils/authMiddleware");
+const authMiddleware = require("../../utils/authMiddleware");
 // create tasks
 router.post(
     "/projects/:projectId/tasks",
