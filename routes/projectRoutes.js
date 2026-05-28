@@ -55,3 +55,126 @@ router.get("/", authMiddleware, async (req, res) => {
         });
     }
 });
+
+// single project //GET /api/projects/:id
+router.get("/:id", authMiddleware, async (req, res) => {
+
+    try {
+
+        const project = await Project.findById(req.params.id);
+
+        // project not found
+        if (!project) {
+            return res.status(404).json({
+                message: "Project not found"
+            });
+        }
+
+        // ownership check
+        if (project.user.toString() !== req.user._id) {
+
+            return res.status(403).json({
+                message: "Not authorized"
+            });
+        }
+
+        res.json(project);
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            message: "Server Error"
+        });
+    }
+});
+// Update Project
+//PUT /api/projects/:id
+router.put("/:id", authMiddleware, async (req, res) => {
+
+    try {
+
+        const project = await Project.findById(req.params.id);
+
+        // project not found
+        if (!project) {
+            return res.status(404).json({
+                message: "Project not found"
+            });
+        }
+
+        // ownership check
+        if (project.user.toString() !== req.user._id) {
+
+            return res.status(403).json({
+                message: "Not authorized"
+            });
+        }
+
+        const updatedProject = await Project.findByIdAndUpdate(
+
+            req.params.id,
+
+            {
+                name: req.body.name,
+                description: req.body.description
+            },
+
+            { new: true }
+
+        );
+
+        res.json(updatedProject);
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            message: "Server Error"
+        });
+    }
+});
+
+// Delete Project .. /api/projects/:id
+router.delete("/:id", authMiddleware, async (req, res) => {
+
+    try {
+
+        const project = await Project.findById(req.params.id);
+
+        // project not found
+        if (!project) {
+            return res.status(404).json({
+                message: "Project not found"
+            });
+        }
+
+        // ownership check
+        if (project.user.toString() !== req.user._id) {
+
+            return res.status(403).json({
+                message: "Not authorized"
+            });
+        }
+
+        await Project.findByIdAndDelete(req.params.id);
+
+        res.json({
+            message: "Project deleted successfully"
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            message: "Server Error"
+        });
+    }
+});
+
+
+module.exports = router;
+
