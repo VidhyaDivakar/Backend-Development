@@ -1,14 +1,14 @@
+### **Project Planning & Documentation**
+
 ### Server.js
 
 This file will be the main file.
 
-### Relationship Between Users Projects Tasks
-
-Models and Schema
+#### Models and Schema
 
 In this project, we have the user.js, project.js and task.js models and the corresponding schemas.
 
-Routes
+#### Routes
 
 Based on the models, we have the userRoutes.js, projectRoutes.js, and tasksRoutes.js which will be placed inside the api folder inside the routes folder. In this, we will cover Create Task, Get Tasks, Update Tasks, Delete Tasks, etc. These routes will be protected with hashing and authentication.
 

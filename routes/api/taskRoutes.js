@@ -2,8 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
-const Task = require("../../models/Task");
-const Project = require("../../models/Project");
+const Task = require("../../models/task");
+const Project = require("../../models/project");
 
 const authMiddleware = require("../../utils/authMiddleware");
 // create tasks

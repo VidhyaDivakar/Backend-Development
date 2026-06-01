@@ -1,7 +1,7 @@
 {
   "name": "backend-development",
   "version": "1.0.0",
-  "description": "",
+  "description": "backend-development",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
