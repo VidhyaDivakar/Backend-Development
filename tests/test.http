@@ -1,0 +1,201 @@
+@baseUrl = http://localhost:3005
+
+
+### 1. REGISTER USER A
+
+POST {{baseUrl}}/api/users/register
+Content-Type: application/json
+
+{
+  "username": "userA",
+  "email": "userA@test.com",
+  "password": "12345678"
+}
+
+
+### Copy token from response
+
+POST {{baseUrl}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "userA@test.com",
+  "password": "12345678"
+}
+
+
+### 3. REGISTER USER B
+
+POST {{baseUrl}}/api/users/register
+Content-Type: application/json
+
+{
+  "username": "userB",
+  "email": "userB@test.com",
+  "password": "12345678"
+}
+
+
+### 4. LOGIN USER B
+### Copy token from response
+
+POST {{baseUrl}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "userB@test.com",
+  "password": "12345678"
+}
+
+
+### SET TOKENS
+### Replace after login
+
+
+@tokenA = PASTE_USER_A_TOKEN
+@tokenB = PASTE_USER_B_TOKEN
+
+
+### 5. CREATE PROJECT (USER A)
+### Save returned project _id
+
+POST {{baseUrl}}/api/projects
+Authorization: Bearer {{tokenA}}
+Content-Type: application/json
+
+{
+  "name": "Project Alpha",
+  "description": "User A Project"
+}
+
+
+### SET PROJECT ID
+### Replace after creation
+
+
+@projectId = PASTE_PROJECT_ID
+
+
+### 6. GET ALL PROJECTS (USER A)
+
+GET {{baseUrl}}/api/projects
+Authorization: Bearer {{tokenA}}
+
+
+### 7. GET SINGLE PROJECT (USER A)
+
+GET {{baseUrl}}/api/projects/{{projectId}}
+Authorization: Bearer {{tokenA}}
+
+
+### 8. UPDATE PROJECT (USER A)
+
+PUT {{baseUrl}}/api/projects/{{projectId}}
+Authorization: Bearer {{tokenA}}
+Content-Type: application/json
+
+{
+  "name": "Project Alpha Updated",
+  "description": "Updated Description"
+}
+
+
+### 9. CREATE TASK IN PROJECT
+### Save returned task _id
+
+POST {{baseUrl}}/api/projects/{{projectId}}/tasks
+Authorization: Bearer {{tokenA}}
+Content-Type: application/json
+
+{
+  "title": "Build Login",
+  "description": "Create JWT login",
+  "status": "To Do"
+}
+
+
+### SET TASK ID
+### Replace after creation
+
+
+@taskId = PASTE_TASK_ID
+
+
+### 10. GET TASKS FOR PROJECT
+
+GET {{baseUrl}}/api/projects/{{projectId}}/tasks
+Authorization: Bearer {{tokenA}}
+
+
+### 11. UPDATE TASK
+
+PUT {{baseUrl}}/api/tasks/{{taskId}}
+Authorization: Bearer {{tokenA}}
+Content-Type: application/json
+
+{
+  "title": "Build Login API",
+  "description": "JWT Authentication",
+  "status": "In Progress"
+}
+
+
+### SECURITY TESTS
+
+
+
+### 12. ACCESS PROJECT WITHOUT TOKEN
+### Expected: 401
+
+GET {{baseUrl}}/api/projects
+
+
+### 13. USER B ACCESS USER A PROJECT
+### Expected: 403 or 404
+
+GET {{baseUrl}}/api/projects/{{projectId}}
+Authorization: Bearer {{tokenB}}
+
+
+### 14. USER B UPDATE USER A PROJECT
+### Expected: 403 or 404
+
+PUT {{baseUrl}}/api/projects/{{projectId}}
+Authorization: Bearer {{tokenB}}
+Content-Type: application/json
+
+{
+  "name": "Hacked Project",
+  "description": "Should Fail"
+}
+
+
+### 15. USER B ACCESS USER A TASKS
+### Expected: 403 or 404
+
+GET {{baseUrl}}/api/projects/{{projectId}}/tasks
+Authorization: Bearer {{tokenB}}
+
+
+### 16. USER B UPDATE USER A TASK
+### Expected: 403 or 404
+
+PUT {{baseUrl}}/api/tasks/{{taskId}}
+Authorization: Bearer {{tokenB}}
+Content-Type: application/json
+
+{
+  "status": "Done"
+}
+
+
+### 17. DELETE TASK (USER A)
+
+DELETE {{baseUrl}}/api/tasks/{{taskId}}
+Authorization: Bearer {{tokenA}}
+
+
+### 18. DELETE PROJECT (USER A)
+
+DELETE {{baseUrl}}/api/projects/{{projectId}}
+Authorization: Bearer {{tokenA}}

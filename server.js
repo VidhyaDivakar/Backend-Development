@@ -7,13 +7,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const app = express();
-const PORT = 3006;
+
 // importing routes
 
 const userRoutes = require("./routes/api/userRoutes");
 const projectRoutes = require("./routes/api/projectRoutes");
 const taskRoutes = require("./routes/api/taskRoutes");
-const connectDB = require("./db/connectDB");
+const connectDB = require("./config/connectDB");
 connectDB();
 // middleware
 
